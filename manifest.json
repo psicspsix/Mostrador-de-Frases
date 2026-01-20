@@ -1,0 +1,19 @@
+{
+  "name": "Frase Inspire",
+  "short_name": "FraseInspire",
+  "description": "Banco de frases inspiradoras com Firebase",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a19",
+  "theme_color": "#0066ff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💭</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "pt-BR"
+}
