@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frase Inspire - Banco de Citações</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💭</text></svg>">
+</head>
+<body>
+    <!-- Modal de Estatísticas -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-chart-bar"></i> Estatísticas do Banco</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>TOTAL DE FRASES</h3>
+                            <p id="totalFrasesStat" class="stat-number">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>AUTORES ÚNICOS</h3>
+                            <p id="autoresUnicosStat" class="stat-number">0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>FRASES SEM AUTOR</h3>
+                            <p id="semAutorStat" class="stat-number">0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="top-authors">
+                    <h3><i class="fas fa-trophy"></i> TOP 10 AUTORES</h3>
+                    <div id="topAuthorsList" class="authors-list">
+                        <!-- Preenchido por JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Navegação Ordenada -->
+    <div id="ordenadoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-list-ol"></i> Navegação Ordenada</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-instruction">Digite um número de 1 a <span id="totalFrasesOrdenado">0</span> para iniciar:</p>
+                
+                <div class="input-group">
+                    <input type="number" id="numeroInicio" min="1" max="1000" placeholder="Número inicial">
+                </div>
+                
+                <div class="modal-info">
+                    <p><i class="fas fa-info-circle"></i> Você poderá navegar usando os botões "Anterior" e "Próximo"</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnIniciarOrdenado" class="btn btn-primary">
+                    <i class="fas fa-play"></i> Iniciar Navegação
+                </button>
+                <button class="btn btn-secondary close-modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Aplicativo Principal -->
+    <div class="container">
+        <!-- Barra de Controles -->
+        <header class="header">
+            <button id="btnNovaFrase" class="btn btn-primary">
+                <i class="fas fa-redo-alt"></i> Nova Frase
+            </button>
+            
+            <div class="status">
+                <span id="statusText">
+                    <i class="fas fa-sync-alt fa-spin"></i> Conectando ao banco...
+                </span>
+            </div>
+            
+            <div class="header-buttons">
+                <button id="btnOrdenado" class="btn btn-purple">
+                    <i class="fas fa-list-ol"></i> Ordenado
+                </button>
+                
+                <button id="btnAnterior" class="btn btn-nav" disabled>
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                
+                <button id="btnProximo" class="btn btn-nav" disabled>
+                    Próximo <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <button id="btnStats" class="btn btn-stats">
+                    <i class="fas fa-chart-bar"></i> Estatísticas
+                </button>
+                
+                <button id="btnSair" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Sair
+                </button>
+            </div>
+        </header>
+        
+        <!-- Área da Frase -->
+        <main class="main-content">
+            <div class="frase-container">
+                <div id="fraseText" class="frase-text">
+                    Carregando frase inspiradora...
+                </div>
+                <div id="fraseAutor" class="frase-autor">
+                    <!-- Autor aparecerá aqui -->
+                </div>
+            </div>
+            
+            <!-- Contador de Frase (Modo Ordenado) -->
+            <div id="contadorFrase" class="contador-frase" style="display: none;">
+                <span id="indiceAtual">0</span> / <span id="totalFrases">0</span>
+            </div>
+            
+            <!-- Modo Atual -->
+            <div class="modo-indicator">
+                <span id="modoAtual">🎲 Modo Aleatório</span>
+            </div>
+        </main>
+        
+        <!-- Instruções -->
+        <footer class="footer">
+            <div class="instructions">
+                <p><i class="fas fa-mouse-pointer"></i> Clique na frase para uma nova</p>
+                <p><i class="fas fa-keyboard"></i> Pressione <kbd>Espaço</kbd> ou <kbd>Enter</kbd> para nova frase</p>
+                <p><i class="fas fa-keyboard"></i> Pressione <kbd>O</kbd> para modo ordenado</p>
+                <p><i class="fas fa-keyboard"></i> Pressione <kbd>S</kbd> para estatísticas</p>
+            </div>
+            
+            <div class="footer-info">
+                <p>Frase Inspire v2.0 • <span id="contadorFrases">0</span> frases disponíveis</p>
+                <p class="firebase-status">
+                    <i class="fas fa-cloud"></i> 
+                    <span id="firebaseStatus">Conectando ao Firebase...</span>
+                </p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="app.js"></script>
+    
+    <!-- Service Worker para PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registrado com sucesso:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Falha ao registrar Service Worker:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
